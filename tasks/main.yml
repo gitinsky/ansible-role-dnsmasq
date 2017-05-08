@@ -1,7 +1,7 @@
----
-- name: install dnsmasq
-  apt: name=dnsmasq state=present
+# RedHat specific package installations
+- include: RedHat.yml
+  when: ansible_os_family  == "RedHat"
 
-- name: ensure dnsmasq is started and enabled but ignore fail
-  service: name=dnsmasq state=started enabled=yes
-  ignore_errors: true
+# Debian specific package installations
+- include: Debian.yml
+  when: ansible_os_family  == "Debian" or ansible_os_family == "Linuxmint"
