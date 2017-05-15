@@ -1,3 +1,14 @@
 ---
 - name: install dnsmasq
-  yum: name=dnsmasq
+  yum: name=dnsmasq state=present
+
+- name: print dnsmasq_configs
+  debug: var=dnsmasq_configs
+
+- name: create /var/lib/tftpboot
+  file: dest=/var/lib/tftpboot state=directory
+
+- name: put local config files
+  template: src=dnsmasq.conf dest="/etc/dnsmasq.d/{{ item.file_name }}"
+  with_items: "{{ dnsmasq_configs }}"
+  notify: restart dnsmasq
